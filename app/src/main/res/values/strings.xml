@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Studdy</string>
+    <string name="app_subtitle">Smart AI Exam Platform</string>
+
+    <!-- Role Selection -->
+    <string name="role_teacher">Teacher</string>
+    <string name="role_teacher_desc">Create &amp; manage exams</string>
+    <string name="role_student">Student</string>
+    <string name="role_student_desc">Join &amp; take exams</string>
+
+    <!-- Teacher Auth -->
+    <string name="teacher_portal">Teacher Portal</string>
+    <string name="teacher_portal_subtitle">Sign in to manage your exams</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="create_account">Create Account</string>
+    <string name="hint_full_name">e.g. Dr. Arshad Ali</string>
+    <string name="hint_email">teacher@school.com</string>
+    <string name="hint_password">Min 6 characters</string>
+    <string name="label_full_name">Full Name</string>
+    <string name="label_email">Email Address</string>
+    <string name="label_password">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="teacher_portal_footer">Protected for teachers only</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="reset_password_body">Enter your email address and we\'ll send you a link to reset your password.</string>
+    <string name="label_email_reset">Email</string>
+    <string name="btn_send_reset">Send Reset Link</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Auth messages -->
+    <string name="msg_account_created">Account created successfully! Please sign in.</string>
+    <string name="msg_reset_sent">Password reset email sent!</string>
+    <string name="msg_invalid_credentials">Invalid email or password. Please try again.</string>
+    <string name="msg_already_registered">This email is already registered. Please sign in.</string>
+    <string name="msg_password_too_short">Password must be at least 6 characters.</string>
+    <string name="msg_generic_error">Something went wrong. Please try again.</string>
+    <string name="msg_email_required">Please enter your email address.</string>
+    <string name="msg_email_invalid">Please enter a valid email address.</string>
+    <string name="msg_password_required">Please enter your password.</string>
+    <string name="msg_name_required">Please enter your full name.</string>
+    <string name="msg_network_error">Network error. Please check your connection.</string>
+
+    <!-- Student Entry -->
+    <string name="join_exam">Join Exam</string>
+    <string name="enter_exam_code">Enter Exam Code</string>
+    <string name="get_code_hint">Get the code from your teacher</string>
+    <string name="label_exam_code">Exam Code</string>
+    <string name="hint_exam_code">ABC123</string>
+    <string name="btn_verify_code">Verify Code</string>
+    <string name="or_separator">OR</string>
+    <string name="btn_scan_qr">Scan QR Code</string>
+
+    <!-- Student enrollment step 2 -->
+    <string name="enter_enrollment">Enter Enrollment</string>
+    <string name="who_are_you">Who are you?</string>
+    <string name="identify_yourself">Enter your details to identify yourself</string>
+    <string name="label_your_name">Your Name</string>
+    <string name="hint_your_name">e.g. Arshad Ali</string>
+    <string name="label_enrollment">Enrollment Number</string>
+    <string name="hint_enrollment">e.g. 2405112070013</string>
+    <string name="btn_continue">Continue</string>
+    <string name="label_exam_code_display">Code: </string>
+
+    <!-- Student entry validation -->
+    <string name="err_code_invalid">Please enter a valid 6-digit code</string>
+    <string name="err_code_not_found">Invalid exam code. Please check and try again.</string>
+    <string name="err_name_required">Please enter your name.</string>
+    <string name="err_enrollment_too_short">Enrollment must be at least 5 characters.</string>
+    <string name="err_exam_not_started">Not Started Yet</string>
+    <string name="err_exam_expired">Exam Expired</string>
+    <string name="err_already_attempted">You have already attempted this exam.</string>
+
+    <!-- Dashboard -->
+    <string name="teacher_dashboard">My Exams</string>
+    <string name="student_dashboard">Available Exams</string>
+    <string name="no_exams_teacher">No exams yet.\nCreate your first exam!</string>
+    <string name="no_exams_student">No exams available.</string>
+    <string name="btn_create_exam">Create Exam</string>
+    <string name="btn_sign_out">Sign Out</string>
+    <string name="btn_refresh">Refresh</string>
+
+    <!-- Exam creation -->
+    <string name="create_exam">Create Exam</string>
+    <string name="label_exam_title">Exam Title</string>
+    <string name="hint_exam_title">e.g. Chapter 5 Quiz</string>
+    <string name="label_paste_content">Paste Text Content</string>
+    <string name="hint_paste_content">Paste lecture notes, textbook passages, or any content to generate questions from…</string>
+    <string name="btn_generate_questions">Generate Questions with AI</string>
+    <string name="btn_generate_paper">Generate Exam Paper with AI</string>
+    <string name="btn_save_paper">Save Paper</string>
+    <string name="generating_questions">Generating questions…</string>
+    <string name="label_result_mode">Result Visibility</string>
+    <string name="label_timer_mode">Timer</string>
+    <string name="btn_publish_exam">Publish Exam</string>
+    <string name="btn_add_question">Add Question</string>
+
+    <!-- Exam taking -->
+    <string name="question_counter">Question %1$d of %2$d</string>
+    <string name="btn_previous">Previous</string>
+    <string name="btn_next">Next</string>
+    <string name="btn_submit">Submit Exam</string>
+    <string name="confirm_submit_title">Submit Exam?</string>
+    <string name="confirm_submit_body">You have answered %1$d of %2$d questions. Are you sure you want to submit?</string>
+    <string name="btn_submit_confirm">Yes, Submit</string>
+    <string name="time_remaining">Time remaining: %1$s</string>
+
+    <!-- Results -->
+    <string name="your_result">Your Result</string>
+    <string name="score_display">%1$d / %2$d</string>
+    <string name="result_pending">Results will be published by your teacher.</string>
+    <string name="btn_view_answers">View Answers</string>
+    <string name="btn_back_to_dashboard">Back to Dashboard</string>
+
+    <!-- Teacher results screen -->
+    <string name="exam_results">Exam Results</string>
+    <string name="hint_search_students">Search students…</string>
+    <string name="btn_publish_results">Publish Results</string>
+    <string name="btn_monitor_live">Monitor Live</string>
+    <string name="btn_show_qr">Show QR Code</string>
+    <string name="btn_delete_exam">Delete Exam</string>
+    <string name="confirm_delete_title">Delete Exam?</string>
+    <string name="confirm_delete_body">This will permanently delete the exam and all student results. This cannot be undone.</string>
+    <string name="btn_delete_confirm">Delete</string>
+    <string name="participants_count">%1$d participants</string>
+    <string name="avg_score">Avg: %1$d%%</string>
+    <string name="warnings_count">%1$d warnings</string>
+
+    <!-- QR -->
+    <string name="qr_title">Exam QR Code</string>
+    <string name="btn_share_qr">Share</string>
+    <string name="btn_download_qr">Download</string>
+    <string name="scan_instructions">Point camera at the QR code</string>
+
+    <!-- Proctoring -->
+    <string name="proctor_face_missing">No face detected. Please ensure your face is visible.</string>
+    <string name="proctor_multiple_faces">Multiple faces detected. Only one person allowed.</string>
+    <string name="proctor_looking_away">Please look at the screen.</string>
+    <string name="proctor_warning_title">Proctoring Warning</string>
+    <string name="proctor_app_switch">App switching detected! Warning issued.</string>
+
+    <!-- Generated papers -->
+    <string name="my_papers">My Papers</string>
+    <string name="no_papers">No papers generated yet.</string>
+    <string name="btn_generate_paper_simple">Generate Paper</string>
+    <string name="btn_open_pdf">Open PDF</string>
+    <string name="btn_delete_paper">Delete</string>
+
+    <!-- Paper Generator -->
+    <string name="paper_generator">Exam Paper Generator</string>
+    <string name="label_paper_title">Paper Title</string>
+    <string name="hint_paper_title">e.g. Midterm Exam 2026</string>
+    <string name="label_template">Template</string>
+    <string name="template_college">College Internal</string>
+    <string name="template_school">School Exam</string>
+    <string name="template_mcq_only">MCQ Only Test</string>
+    <string name="template_unit_test">Unit Test</string>
+    <string name="label_overall_difficulty">Overall Difficulty</string>
+    <string name="label_paper_structure">Paper Structure</string>
+    <string name="label_total_marks">Total Marks</string>
+    <string name="btn_add_section">Add Section</string>
+    <string name="section_mcq">MCQ (Multiple Choice)</string>
+    <string name="section_short_answer">Short Answer</string>
+    <string name="section_long_answer">Long Answer</string>
+    <string name="section_true_false">True / False</string>
+    <string name="section_fill_blank">Fill in the Blank</string>
+    <string name="label_question_type">Question Type</string>
+    <string name="label_question_count">Question Count</string>
+    <string name="label_marks_per_q">Marks Per Question</string>
+    <string name="label_section_difficulty">Difficulty</string>
+    <string name="label_difficulty_easy">Easy</string>
+    <string name="label_difficulty_medium">Medium</string>
+    <string name="label_difficulty_hard">Hard</string>
+
+    <!-- Common -->
+    <string name="loading">Loading…</string>
+    <string name="retry">Retry</string>
+    <string name="ok">OK</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+    <string name="share">Share</string>
+    <string name="close">Close</string>
+    <string name="back">Back</string>
+    <string name="questions_count">%1$d questions</string>
+    <string name="exam_code_label">Code: %1$s</string>
+</resources>

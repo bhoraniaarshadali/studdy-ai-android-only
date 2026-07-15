@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="paper_templates">
+        <item>@string/template_school</item>
+        <item>@string/template_college</item>
+        <item>@string/template_mcq_only</item>
+        <item>@string/template_unit_test</item>
+    </string-array>
+
+    <string-array name="section_question_types">
+        <item>@string/section_mcq</item>
+        <item>@string/section_short_answer</item>
+        <item>@string/section_long_answer</item>
+        <item>@string/section_true_false</item>
+        <item>@string/section_fill_blank</item>
+    </string-array>
+</resources>

@@ -1,0 +1,978 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_page"
+    tools:context=".ui.teacher.create.CreateExamActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Header -->
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            style="@style/Studdy.Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/create_exam"
+            app:navigationIcon="@drawable/ic_back" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="40dp">
+
+                <!-- ── STEP 1: Configuration Form ────────────────────────────── -->
+                <LinearLayout
+                    android:id="@+id/layout_create_step1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <com.google.android.material.card.MaterialCardView
+                        style="@style/Studdy.Card.Flat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="15dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="20dp">
+
+                            <!-- Title -->
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/til_exam_title"
+                                style="@style/Studdy.TextInputLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="16dp">
+<!--                                android:hint="@string/label_exam_title">-->
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/et_exam_title"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="@string/hint_exam_title"
+                                    android:imeOptions="actionNext"
+                                    android:inputType="textCapWords"
+                                    android:maxLines="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <!-- Pasted Text Content -->
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/til_exam_content"
+                                style="@style/Studdy.TextInputLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="20dp"
+                                android:hint="@string/label_paste_content">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/et_exam_content"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="130dp"
+                                    android:gravity="top"
+                                    android:inputType="textMultiLine" />
+<!--                                    android:hint="@string/hint_paste_content"-->
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <!-- PDF Document Upload Option -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="8dp"
+                                android:fontFamily="sans-serif-medium"
+                                android:text="OR Upload PDF Content"
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:layout_marginBottom="20dp">
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_upload_pdf"
+                                    style="@style/Studdy.Button.Secondary"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="@dimen/btn_height_sm"
+                                    android:text="Choose PDF"
+                                    app:icon="@drawable/ic_book" />
+
+                                <TextView
+                                    android:id="@+id/tv_pdf_name"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="12dp"
+                                    android:text="No PDF file selected"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="13sp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1" />
+
+                                <ImageButton
+                                    android:id="@+id/btn_clear_pdf"
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:layout_marginStart="8dp"
+                                    android:background="?attr/selectableItemBackgroundBorderless"
+                                    android:src="@drawable/ic_delete"
+                                    android:visibility="gone"
+                                    app:tint="@color/color_error" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layout_paper_controls"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:visibility="gone"
+                                android:layout_marginBottom="16dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Paper Template"
+                                    android:textColor="@color/text_primary"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:layout_marginBottom="8dp" />
+
+                                <Spinner
+                                    android:id="@+id/spinner_paper_template"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="48dp"
+                                    android:background="@drawable/bg_spinner"
+                                    android:layout_marginBottom="16dp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Overall Difficulty"
+                                    android:textColor="@color/text_primary"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:layout_marginBottom="12dp" />
+
+                                <com.google.android.material.button.MaterialButtonToggleGroup
+                                    android:id="@+id/toggle_paper_difficulty"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="24dp"
+                                    app:singleSelection="true"
+                                    app:selectionRequired="true">
+
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/btn_paper_diff_easy"
+                                        style="@style/Widget.Material3.Button.OutlinedButton"
+                                        android:layout_width="0dp"
+                                        android:layout_height="48dp"
+                                        android:layout_weight="1"
+                                        android:text="Easy"
+                                        android:textAllCaps="false" />
+
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/btn_paper_diff_balanced"
+                                        style="@style/Widget.Material3.Button.OutlinedButton"
+                                        android:layout_width="0dp"
+                                        android:layout_height="48dp"
+                                        android:layout_weight="1"
+                                        android:text="Balanced"
+                                        android:textAllCaps="false"
+                                        android:checked="true" />
+
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/btn_paper_diff_tough"
+                                        style="@style/Widget.Material3.Button.OutlinedButton"
+                                        android:layout_width="0dp"
+                                        android:layout_height="48dp"
+                                        android:layout_weight="1"
+                                        android:text="Tough"
+                                        android:textAllCaps="false" />
+                                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical"
+                                    android:layout_marginBottom="12dp">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Paper Structure"
+                                        android:textColor="@color/text_primary"
+                                        android:textSize="14sp"
+                                        android:fontFamily="sans-serif-medium" />
+
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/btn_add_section"
+                                        style="@style/Studdy.Button.Secondary"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="40dp"
+                                        android:text="Add Section"
+                                        android:textAllCaps="false" />
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/tv_paper_section_hint"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Create the paper by adding sections with question counts, marks, and difficulty."
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="13sp"
+                                    android:layout_marginBottom="16dp" />
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rv_paper_sections"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:nestedScrollingEnabled="false"
+                                    android:layout_marginBottom="12dp" />
+
+                                <TextView
+                                    android:id="@+id/tv_paper_empty_state"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="No sections yet. Add a section to start building the paper."
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="13sp"
+                                    android:gravity="center"
+                                    android:visibility="visible"
+                                    android:padding="16dp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical"
+                                    android:padding="12dp"
+                                    android:background="@drawable/bg_card"
+                                    android:layout_marginBottom="24dp">
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Total Sections"
+                                            android:textColor="@color/text_secondary"
+                                            android:textSize="12sp" />
+                                        <TextView
+                                            android:id="@+id/tv_paper_section_count"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="0"
+                                            android:textColor="@color/text_primary"
+                                            android:textSize="16sp"
+                                            android:fontFamily="sans-serif-medium" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:gravity="end">
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Total Marks"
+                                            android:textColor="@color/text_secondary"
+                                            android:textSize="12sp" />
+                                        <TextView
+                                            android:id="@+id/tv_paper_total_marks"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="0"
+                                            android:textColor="@color/text_primary"
+                                            android:textSize="16sp"
+                                            android:fontFamily="sans-serif-medium" />
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layout_mcq_controls"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_question_count_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="8dp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:text="Number of Questions to Generate"
+                                    android:textColor="@color/text_primary"
+                                    android:textSize="14sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical"
+                                    android:layout_marginBottom="24dp">
+
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/btn_decrement_questions"
+                                        style="@style/Widget.Material3.Button.OutlinedButton"
+                                        android:layout_width="48dp"
+                                        android:layout_height="48dp"
+                                        android:padding="0dp"
+                                        android:text="−"
+                                        android:insetTop="0dp"
+                                        android:insetBottom="0dp"
+                                        android:insetLeft="0dp"
+                                        android:insetRight="0dp"
+                                        android:textSize="20sp"
+                                        app:cornerRadius="12dp"
+                                        app:strokeColor="@color/brand_primary"
+                                        android:textColor="@color/brand_primary" />
+
+                                    <TextView
+                                        android:id="@+id/tv_question_count"
+                                        android:layout_width="60dp"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:text="10"
+                                        android:textColor="@color/text_primary"
+                                        android:textSize="18sp"
+                                        android:fontFamily="sans-serif-medium" />
+
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/btn_increment_questions"
+                                        style="@style/Widget.Material3.Button.OutlinedButton"
+                                        android:layout_width="48dp"
+                                        android:layout_height="48dp"
+                                        android:padding="0dp"
+                                        android:text="+"
+                                        android:insetTop="0dp"
+                                        android:insetBottom="0dp"
+                                        android:insetLeft="0dp"
+                                        android:insetRight="0dp"
+                                        android:textSize="20sp"
+                                        app:cornerRadius="12dp"
+                                        app:strokeColor="@color/brand_primary"
+                                        android:textColor="@color/brand_primary" />
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/tv_difficulty_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="12dp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:text="Difficulty"
+                                    android:textColor="@color/text_primary"
+                                    android:textSize="14sp" />
+
+                                <com.google.android.material.button.MaterialButtonToggleGroup
+                                    android:id="@+id/toggle_difficulty"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="24dp"
+                                    app:singleSelection="true"
+                                    app:selectionRequired="true">
+
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/btn_difficulty_easy"
+                                        style="@style/Widget.Material3.Button.OutlinedButton"
+                                        android:layout_width="0dp"
+                                        android:layout_height="48dp"
+                                        android:layout_weight="1"
+                                        android:text="Easy"
+                                        android:textAllCaps="false" />
+
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/btn_difficulty_balanced"
+                                        style="@style/Widget.Material3.Button.OutlinedButton"
+                                        android:layout_width="0dp"
+                                        android:layout_height="48dp"
+                                        android:layout_weight="1"
+                                        android:text="Balanced"
+                                        android:textAllCaps="false"
+                                        android:checked="true" />
+
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/btn_difficulty_tough"
+                                        style="@style/Widget.Material3.Button.OutlinedButton"
+                                        android:layout_width="0dp"
+                                        android:layout_height="48dp"
+                                        android:layout_weight="1"
+                                        android:text="Tough"
+                                        android:textAllCaps="false" />
+                                </com.google.android.material.button.MaterialButtonToggleGroup>
+                            </LinearLayout>
+
+                            <!-- Result Mode Selection -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="12dp"
+                                android:fontFamily="sans-serif-medium"
+                                android:text="Result Publish Mode"
+                                android:textColor="@color/text_primary"
+                                android:textSize="15sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginBottom="24dp">
+
+                                <!-- Instant Release Card -->
+                                <com.google.android.material.card.MaterialCardView
+                                    android:id="@+id/card_result_instant"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginEnd="8dp"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:checkable="true"
+                                    android:checked="true"
+                                    app:cardElevation="0dp"
+                                    app:cardBackgroundColor="@color/color_selectable_card_bg"
+                                    app:strokeColor="@color/color_selectable_card_stroke"
+                                    app:strokeWidth="2dp"
+                                    app:checkedIcon="@drawable/ic_check_circle_themed"
+                                    app:checkedIconVisible="true"
+                                    app:checkedIconTint="@null">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:gravity="center"
+                                        android:padding="16dp">
+
+                                        <ImageView
+                                            android:layout_width="24dp"
+                                            android:layout_height="24dp"
+                                            android:src="@drawable/ic_visibility"
+                                            android:duplicateParentState="true"
+                                            app:tint="@color/color_selectable_icon_primary" />
+
+                                        <TextView
+                                            android:id="@+id/tv_result_instant_title"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="8dp"
+                                            android:fontFamily="sans-serif-medium"
+                                            android:text="Instant"
+                                            android:duplicateParentState="true"
+                                            android:textColor="@color/color_selectable_text_primary"
+                                            android:textSize="14sp" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Auto Publish"
+                                            android:duplicateParentState="true"
+                                            android:textColor="?attr/colorOnSurfaceVariant"
+                                            android:textSize="11sp" />
+                                    </LinearLayout>
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <!-- Manual Release Card -->
+                                <com.google.android.material.card.MaterialCardView
+                                    android:id="@+id/card_result_manual"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="8dp"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:checkable="true"
+                                    app:cardElevation="0dp"
+                                    app:cardBackgroundColor="@color/color_selectable_card_bg"
+                                    app:strokeColor="@color/color_selectable_card_stroke"
+                                    app:strokeWidth="2dp"
+                                    app:checkedIcon="@drawable/ic_check_circle_themed"
+                                    app:checkedIconVisible="true"
+                                    app:checkedIconTint="@null">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:gravity="center"
+                                        android:padding="16dp">
+
+                                        <ImageView
+                                            android:layout_width="24dp"
+                                            android:layout_height="24dp"
+                                            android:src="@drawable/ic_lock"
+                                            android:duplicateParentState="true"
+                                            app:tint="@color/color_selectable_icon_primary" />
+
+                                        <TextView
+                                            android:id="@+id/tv_result_manual_title"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="8dp"
+                                            android:fontFamily="sans-serif-medium"
+                                            android:text="Manual"
+                                            android:duplicateParentState="true"
+                                            android:textColor="@color/color_selectable_text_primary"
+                                            android:textSize="14sp" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Teacher Review"
+                                            android:duplicateParentState="true"
+                                            android:textColor="?attr/colorOnSurfaceVariant"
+                                            android:textSize="11sp" />
+                                    </LinearLayout>
+                                </com.google.android.material.card.MaterialCardView>
+                            </LinearLayout>
+
+                            <!-- Timer Mode selection -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="12dp"
+                                android:fontFamily="sans-serif-medium"
+                                android:text="Timer Configuration"
+                                android:textColor="@color/text_primary"
+                                android:textSize="15sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginBottom="16dp">
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:id="@+id/card_timer_none"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginEnd="4dp"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:checkable="true"
+                                    android:checked="true"
+                                    app:cardElevation="0dp"
+                                    app:cardBackgroundColor="@color/color_selectable_card_bg"
+                                    app:strokeColor="@color/color_selectable_card_stroke"
+                                    app:strokeWidth="2dp"
+                                    app:checkedIcon="@drawable/ic_check_circle_themed"
+                                    app:checkedIconVisible="true"
+                                    app:checkedIconTint="@null">
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:paddingVertical="12dp"
+                                        android:text="No Timer"
+                                        android:duplicateParentState="true"
+                                        android:textColor="@color/color_selectable_text_primary"
+                                        android:fontFamily="sans-serif-medium"
+                                        android:textSize="13sp" />
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:id="@+id/card_timer_duration"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginHorizontal="4dp"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:checkable="true"
+                                    app:cardElevation="0dp"
+                                    app:cardBackgroundColor="@color/color_selectable_card_bg"
+                                    app:strokeColor="@color/color_selectable_card_stroke"
+                                    app:strokeWidth="2dp"
+                                    app:checkedIcon="@drawable/ic_check_circle_themed"
+                                    app:checkedIconVisible="true"
+                                    app:checkedIconTint="@null">
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:paddingVertical="12dp"
+                                        android:text="Duration"
+                                        android:duplicateParentState="true"
+                                        android:textColor="@color/color_selectable_text_primary"
+                                        android:fontFamily="sans-serif-medium"
+                                        android:textSize="13sp" />
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:id="@+id/card_timer_window"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="4dp"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:checkable="true"
+                                    app:cardElevation="0dp"
+                                    app:cardBackgroundColor="@color/color_selectable_card_bg"
+                                    app:strokeColor="@color/color_selectable_card_stroke"
+                                    app:strokeWidth="2dp"
+                                    app:checkedIcon="@drawable/ic_check_circle_themed"
+                                    app:checkedIconVisible="true"
+                                    app:checkedIconTint="@null">
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:paddingVertical="12dp"
+                                        android:text="Window"
+                                        android:duplicateParentState="true"
+                                        android:textColor="@color/color_selectable_text_primary"
+                                        android:fontFamily="sans-serif-medium"
+                                        android:textSize="13sp" />
+                                </com.google.android.material.card.MaterialCardView>
+                            </LinearLayout>
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/layout_duration_config"
+                                style="@style/Studdy.Card.Flat"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:cardBackgroundColor="#F9F7FF"
+                                app:strokeColor="@color/brand_primary"
+                                android:layout_marginBottom="24dp"
+                                android:visibility="gone"
+                                tools:visibility="visible">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:padding="16dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Duration (minutes)"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif-medium" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:layout_marginTop="16dp">
+
+                                    <ImageButton
+                                        android:id="@+id/btn_duration_minus"
+                                        android:layout_width="48dp"
+                                        android:layout_height="48dp"
+                                        android:background="@drawable/bg_circle_primary_light"
+                                        android:src="@drawable/ic_remove"
+                                        app:tint="@color/brand_primary" />
+
+                                    <TextView
+                                        android:id="@+id/tv_duration_value"
+                                        android:layout_width="80dp"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:text="60"
+                                        android:textColor="@color/text_primary"
+                                        android:textSize="28sp"
+                                        android:fontFamily="sans-serif-black" />
+
+                                    <ImageButton
+                                        android:id="@+id/btn_duration_plus"
+                                        android:layout_width="48dp"
+                                        android:layout_height="48dp"
+                                        android:background="@drawable/bg_circle_primary_light"
+                                        android:src="@drawable/ic_plus"
+                                        app:tint="@color/brand_primary" />
+                                </LinearLayout>
+
+                                <HorizontalScrollView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:scrollbars="none"
+                                    android:layout_marginTop="16dp">
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
+
+                                        <CheckBox
+                                            android:id="@+id/chip_dur_15"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="36dp"
+                                            android:layout_marginEnd="8dp"
+                                            android:background="@drawable/bg_chip_selectable"
+                                            android:button="@null"
+                                            android:gravity="center"
+                                            android:paddingHorizontal="12dp"
+                                            android:text="15 min"
+                                            android:textColor="@color/text_chip_selectable"
+                                            android:textSize="12sp"
+                                            android:fontFamily="sans-serif-medium" />
+
+                                        <CheckBox
+                                            android:id="@+id/chip_dur_30"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="36dp"
+                                            android:layout_marginEnd="8dp"
+                                            android:background="@drawable/bg_chip_selectable"
+                                            android:button="@null"
+                                            android:gravity="center"
+                                            android:paddingHorizontal="12dp"
+                                            android:text="30 min"
+                                            android:textColor="@color/text_chip_selectable"
+                                            android:textSize="12sp"
+                                            android:fontFamily="sans-serif-medium" />
+
+                                        <CheckBox
+                                            android:id="@+id/chip_dur_45"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="36dp"
+                                            android:layout_marginEnd="8dp"
+                                            android:background="@drawable/bg_chip_selectable"
+                                            android:button="@null"
+                                            android:gravity="center"
+                                            android:paddingHorizontal="12dp"
+                                            android:text="45 min"
+                                            android:textColor="@color/text_chip_selectable"
+                                            android:textSize="12sp"
+                                            android:fontFamily="sans-serif-medium" />
+
+                                        <CheckBox
+                                            android:id="@+id/chip_dur_60"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="36dp"
+                                            android:layout_marginEnd="8dp"
+                                            android:background="@drawable/bg_chip_selectable"
+                                            android:button="@null"
+                                            android:gravity="center"
+                                            android:paddingHorizontal="12dp"
+                                            android:text="60 min"
+                                            android:textColor="@color/text_chip_selectable"
+                                            android:textSize="12sp"
+                                            android:fontFamily="sans-serif-medium"
+                                            android:checked="true" />
+
+                                        <CheckBox
+                                            android:id="@+id/chip_dur_90"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="36dp"
+                                            android:background="@drawable/bg_chip_selectable"
+                                            android:button="@null"
+                                            android:gravity="center"
+                                            android:paddingHorizontal="12dp"
+                                            android:text="90 min"
+                                            android:textColor="@color/text_chip_selectable"
+                                            android:textSize="12sp"
+                                            android:fontFamily="sans-serif-medium" />
+                                    </LinearLayout>
+                                </HorizontalScrollView>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                            <!-- Conditional: Window Fields -->
+                            <LinearLayout
+                                android:id="@+id/layout_window_inputs"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginBottom="24dp"
+                                android:visibility="gone"
+                                tools:visibility="visible">
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/til_window_start"
+                                    style="@style/Studdy.TextInputLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="12dp"
+                                    android:hint="Start Date &amp; Time"
+                                    app:endIconDrawable="@drawable/ic_calendar"
+                                    app:endIconMode="custom"
+                                    app:endIconTint="@color/brand_primary">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/et_window_start"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:focusable="false"
+                                        android:padding="16dp"
+                                        android:inputType="none" />
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/til_window_end"
+                                    style="@style/Studdy.TextInputLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="End Date &amp; Time"
+                                    app:endIconDrawable="@drawable/ic_calendar"
+                                    app:endIconMode="custom"
+                                    app:endIconTint="@color/brand_primary">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/et_window_end"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:focusable="false"
+                                        android:padding="16dp"
+                                        android:inputType="none" />
+                                </com.google.android.material.textfield.TextInputLayout>
+                            </LinearLayout>
+
+                            <com.google.android.material.switchmaterial.SwitchMaterial
+                                android:id="@+id/switch_proctoring"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="28dp"
+                                android:text="Enable AI Proctoring Mode"
+                                android:textColor="@color/text_primary"
+                                android:textSize="15sp"
+                                android:checked="true"
+                                android:fontFamily="sans-serif-medium" />
+
+                            <!-- Generate button -->
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_generate"
+                                style="@style/Studdy.Button.Primary"
+                                android:layout_width="match_parent"
+                                android:layout_height="56dp"
+                                android:text="@string/btn_generate_questions"
+                                app:cornerRadius="16dp"
+                                android:fontFamily="sans-serif-bold"
+                                android:textAllCaps="false" />
+
+                            <ProgressBar
+                                android:id="@+id/progress_loading"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="16dp"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <!-- ── STEP 2: Questions Review & Publish ────────────────────── -->
+                <LinearLayout
+                    android:id="@+id/layout_create_step2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="gone">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_generated_questions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:nestedScrollingEnabled="false" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- Bottom sticky action bar for Step 2 publish -->
+        <LinearLayout
+            android:id="@+id/layout_publish_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/bg_card"
+            android:padding="16dp"
+            android:elevation="8dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_publish"
+                style="@style/Studdy.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:backgroundTint="@color/brand_accent"
+                android:text="@string/btn_publish_exam"
+                app:cornerRadius="16dp"
+                android:fontFamily="sans-serif-bold"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Centered Modal Loader Overlay -->
+    <FrameLayout
+        android:id="@+id/layout_loading_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Material3.CardView.Elevated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
+            app:cardBackgroundColor="@color/bg_card">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="28dp">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/progress_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    app:indicatorColor="@color/brand_primary" />
+
+                <TextView
+                    android:id="@+id/tv_loading_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Processing..."
+                    android:textColor="@color/text_primary"
+                    android:textSize="15sp"
+                    android:fontFamily="sans-serif-medium" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

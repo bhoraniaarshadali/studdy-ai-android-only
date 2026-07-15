@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_show_answer_key"
+        android:icon="@drawable/ic_key"
+        android:title="Answer Key"
+        app:showAsAction="ifRoom"
+        app:iconTint="@color/text_primary" />
+    <item
+        android:id="@+id/action_show_qr"
+        android:icon="@drawable/ic_qr_code"
+        android:title="Show QR Code"
+        app:showAsAction="ifRoom"
+        app:iconTint="@color/text_primary" />
+</menu>

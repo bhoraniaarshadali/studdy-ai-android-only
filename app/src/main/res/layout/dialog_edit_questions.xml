@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="16dp">
+
+    <!-- Warning Banner -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFF3E0"
+        android:padding="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="Changing the correct answer will only affect students who have not yet submitted."
+        android:textColor="#E65100"
+        android:textSize="13sp"
+        android:fontFamily="sans-serif" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_edit_questions"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:scrollbars="vertical" />
+</LinearLayout>
