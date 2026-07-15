@@ -77,28 +77,3 @@ Studdy uses a PostgreSQL 17 database hosted on Supabase. The database contains f
 5. **`public.generated_papers`**: Stores printable/offline exam papers and their metadata.
 
 ---
-
-## 🚀 Setting Up the Project
-
-### Prerequisites
-- Android Studio Ladybug (or newer)
-- JDK 17
-- A Supabase Project
-- A Gemini API Key
-
-### Configuration
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/bhoraniaarshadali/studdy-ai-android-only.git
-   ```
-2. Open the project in Android Studio.
-3. Create a `local.properties` file in the root directory (never commit this file) and populate it with your API keys:
-   ```properties
-   # Supabase Configuration
-   SUPABASE_URL=https://your-project-id.supabase.co
-   SUPABASE_ANON_KEY=your-supabase-anon-key
-   
-   # Google Gemini AI Configuration
-   GEMINI_API_KEY=your-gemini-api-key
-   ```
-4. Build and run the project on your device or emulator.
