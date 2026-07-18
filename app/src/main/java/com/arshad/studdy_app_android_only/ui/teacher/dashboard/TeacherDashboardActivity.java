@@ -1,6 +1,7 @@
 package com.arshad.studdy_app_android_only.ui.teacher.dashboard;
 
 import android.content.Intent;
+import com.arshad.studdy_app_android_only.util.ErrorMessageMapper;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -138,14 +139,16 @@ public class TeacherDashboardActivity extends BaseActivity implements TeacherExa
                         adapter.setExams(exams);
                     }
                 } else {
-                    Toast.makeText(TeacherDashboardActivity.this, "Failed to load exams: HTTP " + response.code(), Toast.LENGTH_SHORT).show();
+                    String friendly = ErrorMessageMapper.toUserMessage("TeacherDashboardActivity", "Failed to load exams", response.code());
+                    Toast.makeText(TeacherDashboardActivity.this, friendly, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Exam>> call, Throwable t) {
                 binding.swipeRefresh.setRefreshing(false);
-                Toast.makeText(TeacherDashboardActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                String friendly = ErrorMessageMapper.toUserMessage("TeacherDashboardActivity", "Network error loading exams", t);
+                Toast.makeText(TeacherDashboardActivity.this, friendly, Toast.LENGTH_SHORT).show();
             }
         });
     }

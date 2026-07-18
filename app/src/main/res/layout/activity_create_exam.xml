@@ -854,7 +854,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="28dp"
-                                android:text="Enable AI Proctoring Mode"
+                                android:text="Enable Camera Proctoring Mode"
                                 android:textColor="@color/text_primary"
                                 android:textSize="15sp"
                                 android:checked="true"

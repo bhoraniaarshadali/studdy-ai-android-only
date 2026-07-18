@@ -1,6 +1,8 @@
 package com.arshad.studdy_app_android_only.ui.student.proctoring;
 
 import android.content.Context;
+ import android.graphics.Bitmap;
+ import android.graphics.Color;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -11,8 +13,11 @@ import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.core.resolutionselector.ResolutionSelector;
+import androidx.camera.core.resolutionselector.ResolutionStrategy;
 import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
+import android.util.Size;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.google.common.util.concurrent.ListenableFuture;
@@ -59,6 +64,37 @@ public class FaceDetectionManager {
     private long noFaceStartTimestamp = 0;
     private long lookingAwayStartTimestamp = 0;
 
+    /**
+     * Call this as early as possible (e.g. from PreExamInstructionsActivity.onCreate)
+     * to eagerly load the 65-node TFLite face detection model off the main thread.
+     * Without this, the first real inference call causes TFLite JNI compilation that
+     * saturates the GPU buffer queue and produces 6-12s JankTracker freezes.
+     */
+    public static void warmUp(Context context) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            try {
+                FaceDetectorOptions opts = new FaceDetectorOptions.Builder()
+                        .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
+                        .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_NONE)
+                        .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_NONE)
+                        .build();
+                FaceDetector warmDetector = FaceDetection.getClient(opts);
+                // 1x1 black bitmap — minimal memory, forces TFLite model load
+                Bitmap dummy = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+                dummy.setPixel(0, 0, Color.BLACK);
+                InputImage dummyImage = InputImage.fromBitmap(dummy, 0);
+                warmDetector.process(dummyImage)
+                        .addOnCompleteListener(task -> {
+                            warmDetector.close();
+                            dummy.recycle();
+                            Log.d(TAG, "FaceDetectionManager: TFLite model warm-up complete.");
+                        });
+            } catch (Exception e) {
+                Log.w(TAG, "FaceDetectionManager: warm-up failed (non-fatal)", e);
+            }
+        });
+    }
+
     public FaceDetectionManager(Context context, LifecycleOwner lifecycleOwner, PreviewView previewView, ProctoringListener listener) {
         this.context = context;
         this.lifecycleOwner = lifecycleOwner;
@@ -102,8 +138,18 @@ public class FaceDetectionManager {
     private void bindProctoringUseCases() {
         if (cameraProvider == null) return;
 
+        // Restrict camera resolution to 480x640 to prevent UI lag / high CPU usage
+        ResolutionSelector resolutionSelector = new ResolutionSelector.Builder()
+                .setResolutionStrategy(new ResolutionStrategy(
+                        new Size(480, 640),
+                        ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER
+                ))
+                .build();
+
         // 1. Preview use case (optional display in corner)
-        Preview preview = new Preview.Builder().build();
+        Preview preview = new Preview.Builder()
+                .setResolutionSelector(resolutionSelector)
+                .build();
         if (previewView != null) {
             preview.setSurfaceProvider(previewView.getSurfaceProvider());
         }
@@ -111,6 +157,7 @@ public class FaceDetectionManager {
         // 2. Image analysis use case for face recognition
         ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .setResolutionSelector(resolutionSelector)
                 .build();
 
         imageAnalysis.setAnalyzer(cameraExecutor, new ImageAnalysis.Analyzer() {

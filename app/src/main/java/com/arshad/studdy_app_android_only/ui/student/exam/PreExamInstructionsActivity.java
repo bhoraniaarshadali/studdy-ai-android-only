@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import com.arshad.studdy_app_android_only.util.ErrorMessageMapper;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.arshad.studdy_app_android_only.data.model.Exam;
 import com.arshad.studdy_app_android_only.data.repository.StudentRepository;
 import com.arshad.studdy_app_android_only.databinding.ActivityPreExamInstructionsBinding;
 import com.arshad.studdy_app_android_only.ui.BaseActivity;
+import com.arshad.studdy_app_android_only.ui.student.proctoring.FaceDetectionManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class PreExamInstructionsActivity extends BaseActivity {
@@ -65,6 +67,13 @@ public class PreExamInstructionsActivity extends BaseActivity {
         }
 
         setupToolbar();
+
+        // Eagerly warm up the ML Kit TFLite face detector in the background.
+        // The first real inference compiles a 65-node model which stalls the GPU
+        // buffer queue for 6-12s. Running a dummy inference here, while the
+        // student reads instructions, eliminates that freeze at exam launch.
+        FaceDetectionManager.warmUp(this);
+
         loadExamDetails();
     }
 
@@ -114,7 +123,8 @@ public class PreExamInstructionsActivity extends BaseActivity {
             @Override
             public void onFailure(String errorMessage) {
                 binding.progressLoading.setVisibility(View.GONE);
-                Toast.makeText(PreExamInstructionsActivity.this, "Failed to load exam details: " + errorMessage, Toast.LENGTH_SHORT).show();
+                String friendlyMsg = ErrorMessageMapper.toUserMessage("PreExamInstructionsActivity", "Failed to load exam details", errorMessage);
+                Toast.makeText(PreExamInstructionsActivity.this, friendlyMsg, Toast.LENGTH_SHORT).show();
                 finish();
             }
         });

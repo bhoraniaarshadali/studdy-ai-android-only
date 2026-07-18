@@ -1,6 +1,7 @@
 package com.arshad.studdy_app_android_only.ui.student.dashboard;
 
 import android.content.Intent;
+import com.arshad.studdy_app_android_only.util.ErrorMessageMapper;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -112,7 +113,8 @@ public class MyResultsActivity extends BaseActivity {
             @Override
             public void onFailure(String errorMessage) {
                 binding.swipeRefresh.setRefreshing(false);
-                Toast.makeText(MyResultsActivity.this, "Failed to load exams: " + errorMessage, Toast.LENGTH_SHORT).show();
+                String friendlyMsg = ErrorMessageMapper.toUserMessage("MyResultsActivity", "Failed to load exams", errorMessage);
+                Toast.makeText(MyResultsActivity.this, friendlyMsg, Toast.LENGTH_SHORT).show();
                 loadResults(); // attempt to load results anyway
             }
         });
@@ -134,7 +136,8 @@ public class MyResultsActivity extends BaseActivity {
             @Override
             public void onFailure(String errorMessage) {
                 binding.swipeRefresh.setRefreshing(false);
-                Toast.makeText(MyResultsActivity.this, "Failed to load results: " + errorMessage, Toast.LENGTH_SHORT).show();
+                String friendlyMsg = ErrorMessageMapper.toUserMessage("MyResultsActivity", "Failed to load results", errorMessage);
+                Toast.makeText(MyResultsActivity.this, friendlyMsg, Toast.LENGTH_SHORT).show();
                 calculateStats();
                 filterAndDisplay();
             }

@@ -1,45 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Spacing -->
-    <dimen name="spacing_xs">4dp</dimen>
-    <dimen name="spacing_sm">8dp</dimen>
-    <dimen name="spacing_md">16dp</dimen>
-    <dimen name="spacing_lg">24dp</dimen>
-    <dimen name="spacing_xl">32dp</dimen>
-    <dimen name="spacing_xxl">48dp</dimen>
 
     <!-- Card radius -->
-    <dimen name="radius_sm">8dp</dimen>
     <dimen name="radius_md">12dp</dimen>
-    <dimen name="radius_lg">16dp</dimen>
-    <dimen name="radius_xl">20dp</dimen>
-    <dimen name="radius_full">100dp</dimen>
 
     <!-- Buttons -->
     <dimen name="btn_height">52dp</dimen>
     <dimen name="btn_height_sm">40dp</dimen>
-    <dimen name="btn_radius">14dp</dimen>
 
     <!-- Text field -->
-    <dimen name="field_radius">12dp</dimen>
-    <dimen name="field_height">56dp</dimen>
 
     <!-- Page padding -->
-    <dimen name="page_padding_h">20dp</dimen>
-    <dimen name="page_padding_v">16dp</dimen>
 
     <!-- Icon sizes -->
-    <dimen name="icon_sm">20dp</dimen>
-    <dimen name="icon_md">24dp</dimen>
-    <dimen name="icon_lg">40dp</dimen>
-    <dimen name="icon_xl">64dp</dimen>
-    <dimen name="icon_hero">96dp</dimen>
 
     <!-- Divider -->
-    <dimen name="divider_height">1dp</dimen>
 
     <!-- Elevation -->
-    <dimen name="elevation_card">3dp</dimen>
-    <dimen name="elevation_fab">6dp</dimen>
-    <dimen name="elevation_dialog">8dp</dimen>
 </resources>

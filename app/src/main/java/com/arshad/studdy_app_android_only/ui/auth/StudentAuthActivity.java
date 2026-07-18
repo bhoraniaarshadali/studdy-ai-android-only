@@ -1,6 +1,7 @@
 package com.arshad.studdy_app_android_only.ui.auth;
 
 import android.content.Intent;
+import com.arshad.studdy_app_android_only.util.ErrorMessageMapper;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -183,7 +184,7 @@ public class StudentAuthActivity extends BaseActivity {
         String displayMsg;
         switch (error) {
             case "INVALID_CREDENTIALS":
-                displayMsg = "Invalid enrollment number or password.";
+                displayMsg = "Incorrect email/enrollment number or password. Please try again.";
                 break;
             case "ALREADY_REGISTERED":
                 displayMsg = "A student with this enrollment number is already registered.";
@@ -192,7 +193,7 @@ public class StudentAuthActivity extends BaseActivity {
                 displayMsg = getString(R.string.msg_password_too_short);
                 break;
             default:
-                displayMsg = "Authentication failed: " + error;
+                displayMsg = ErrorMessageMapper.toUserMessage("StudentAuthActivity", "Authentication failed", error);
                 break;
         }
         Toast.makeText(this, displayMsg, Toast.LENGTH_LONG).show();
@@ -278,9 +279,10 @@ public class StudentAuthActivity extends BaseActivity {
                     @Override
                     public void onFailure(String error) {
                         setLoading(false);
+                        String friendlyMsg = ErrorMessageMapper.toUserMessage("StudentAuthActivity", "Failed to send reset link", error);
                         Toast.makeText(
                                 StudentAuthActivity.this,
-                                "Failed to send reset link: " + error,
+                                friendlyMsg,
                                 Toast.LENGTH_LONG
                         ).show();
                     }

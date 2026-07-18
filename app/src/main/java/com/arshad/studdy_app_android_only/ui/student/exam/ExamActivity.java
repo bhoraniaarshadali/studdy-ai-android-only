@@ -33,6 +33,7 @@ import android.content.Context;
 import android.os.Build;
 import androidx.activity.OnBackPressedCallback;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.arshad.studdy_app_android_only.util.ErrorMessageMapper;
 
 import com.arshad.studdy_app_android_only.data.local.AppDatabase;
 import com.arshad.studdy_app_android_only.data.local.dao.LocalExamAttemptDao;
@@ -84,6 +85,10 @@ public class ExamActivity extends BaseActivity implements QuestionPagerAdapter.O
     private boolean isWarningVisible = false;
     private boolean isSubmitting = false;
 
+    // Lock Task (Screen Pinning) state tracking
+    private boolean isLockTaskActive = false;
+    private Runnable pendingPostLockTaskAction = null;
+
     // Proctoring Cooldown
     private long lastWarningDismissedAt = 0;
     private static final long WARNING_COOLDOWN_MS = 10000; // 10 seconds
@@ -115,9 +120,6 @@ public class ExamActivity extends BaseActivity implements QuestionPagerAdapter.O
 
         studentRepository = new StudentRepository();
 
-        // Initialize Room DAO for local answer caching (Phase 2 — offline resilience)
-        localAttemptDao = AppDatabase.getInstance(getApplicationContext()).localExamAttemptDao();
-
         // Retrieve inputs
         examCode = getIntent().getStringExtra("exam_code");
         studentName = getIntent().getStringExtra("student_name");
@@ -132,7 +134,10 @@ public class ExamActivity extends BaseActivity implements QuestionPagerAdapter.O
 
         setupViewPager();
         setupClickListeners();
-        loadExamDetails();
+
+        // Initialize Room DAO off the main thread — Room.build() does synchronous
+        // disk I/O on the first call which would block the main thread for seconds.
+        initRoomThenLoad();
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -199,6 +204,19 @@ public class ExamActivity extends BaseActivity implements QuestionPagerAdapter.O
         }
     }
 
+    /**
+     * Open/create Room DB on a background thread (first-time open does disk I/O
+     * that would freeze the main thread for 5-7 seconds if called synchronously).
+     * Only after the DAO is ready do we kick off the network fetch.
+     */
+    private void initRoomThenLoad() {
+        dbExecutor.execute(() -> {
+            localAttemptDao = AppDatabase.getInstance(getApplicationContext()).localExamAttemptDao();
+            // Post back to main thread to start the network calls
+            new Handler(Looper.getMainLooper()).post(this::loadExamDetails);
+        });
+    }
+
     private void loadExamDetails() {
         studentRepository.getExamByCode(examCode, new StudentRepository.Callback<Exam>() {
             @Override
@@ -212,18 +230,19 @@ public class ExamActivity extends BaseActivity implements QuestionPagerAdapter.O
 
             @Override
             public void onFailure(String errorMessage) {
-                Toast.makeText(ExamActivity.this, "Failed to load exam questions: " + errorMessage, Toast.LENGTH_SHORT).show();
+                binding.layoutInitLoader.setVisibility(View.GONE);
+                String friendlyMsg = ErrorMessageMapper.toUserMessage(TAG, "Failed to load exam questions", errorMessage);
+                Toast.makeText(ExamActivity.this, friendlyMsg, Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
-    }
+     }
 
     private void restoreSessionState() {
         studentRepository.getActiveSession(examCode, enrollmentNumber, new StudentRepository.Callback<ExamSession>() {
             @Override
             public void onSuccess(ExamSession session) {
                 if (session != null) {
-                    // Populate warnings, log history
                     warningCount = session.warnings;
                     if (session.warningsLog != null) {
                         warningsLog.addAll(session.warningsLog);
@@ -237,30 +256,42 @@ public class ExamActivity extends BaseActivity implements QuestionPagerAdapter.O
                         binding.viewPager.setCurrentItem(session.lastQuestionIndex, false);
                     }
 
-                    // Start timer & proctoring
+                    // Start timer immediately (CountDownTimer, no I/O)
                     startExamTimer(session.joinedAt);
-                    startProctoringCamera();
 
-                    try {
-                        startLockTask();
-                    } catch (Exception e) {
-                        Log.e(TAG, "Failed to start lock task mode", e);
-                    }
-                    
+                    // Defer CameraX init to AFTER the first frame is drawn.
+                    // ProcessCameraProvider.bindToLifecycle() competes with the
+                    // layout pass and starves the GPU buffer queue (6–12s jank).
+                    final String joinedAt = session.joinedAt;
+                    binding.getRoot().post(() -> {
+                        startProctoringCamera();
+                        try {
+                            startLockTask();
+                            isLockTaskActive = true;
+                        } catch (Exception e) {
+                            Log.e(TAG, "Failed to start lock task mode", e);
+                        }
+                    });
+
                     // Start periodic autosave loop
                     autoSaveHandler.postDelayed(autoSaveRunnable, AUTOSAVE_INTERVAL_MS);
                 } else {
                     // Fail-safe: populate clean options if session wasn't found
                     pagerAdapter.setData(exam.questions, null);
                     startExamTimer(DateTimeUtils.formatIso8601Now());
-                    startProctoringCamera();
 
-                    try {
-                        startLockTask();
-                    } catch (Exception e) {
-                        Log.e(TAG, "Failed to start lock task mode", e);
-                    }
+                    // Defer CameraX init to after first frame
+                    binding.getRoot().post(() -> {
+                        startProctoringCamera();
+                        try {
+                            startLockTask();
+                            isLockTaskActive = true;
+                        } catch (Exception e) {
+                            Log.e(TAG, "Failed to start lock task mode", e);
+                        }
+                    });
                 }
+                binding.layoutInitLoader.setVisibility(View.GONE);
             }
 
             @Override
@@ -268,6 +299,7 @@ public class ExamActivity extends BaseActivity implements QuestionPagerAdapter.O
                 // Fail-safe loading
                 pagerAdapter.setData(exam.questions, null);
                 startExamTimer(DateTimeUtils.formatIso8601Now());
+                binding.layoutInitLoader.setVisibility(View.GONE);
             }
         });
     }
@@ -591,7 +623,8 @@ public class ExamActivity extends BaseActivity implements QuestionPagerAdapter.O
                             .setCancelable(false)
                             .show();
                 } else {
-                    Toast.makeText(ExamActivity.this, "Submission failed: " + errorMessage + ". Retrying locally...", Toast.LENGTH_LONG).show();
+                    String friendlyMsg = ErrorMessageMapper.toUserMessage(TAG, "Submission failed", errorMessage);
+                    Toast.makeText(ExamActivity.this, friendlyMsg + " Retrying locally...", Toast.LENGTH_LONG).show();
                     // Allow retry
                 }
             }
@@ -617,13 +650,47 @@ public class ExamActivity extends BaseActivity implements QuestionPagerAdapter.O
         });
     }
 
+    /**
+     * Safely stops lock task mode (screen pinning) and executes the given action
+     * only AFTER the system confirms the window is fully un-pinned via
+     * onWindowFocusChanged. This eliminates the race where finish()/startActivity()
+     * fires while the window is still in a "stopped" pinned state, which causes
+     * the system to kill the app process on vivo/Android 11+.
+     *
+     * If lock task was never started (e.g. permission not granted), the action
+     * runs immediately to avoid a hang.
+     */
     private void stopLockTaskAndExecute(Runnable action) {
+        if (!isLockTaskActive) {
+            // Never entered lock task — run action directly, no unlock needed
+            action.run();
+            return;
+        }
+        // Store action; onWindowFocusChanged will fire it once the system
+        // confirms the activity window is fully unfrozen/unpinned.
+        pendingPostLockTaskAction = action;
+        isLockTaskActive = false;
         try {
             stopLockTask();
         } catch (Exception e) {
-            Log.e(TAG, "Failed to stop lock task", e);
+            Log.e(TAG, "stopLockTask failed", e);
+            // Fallback: run action directly if stopLockTask itself threw
+            pendingPostLockTaskAction = null;
+            action.run();
         }
-        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(action, 750);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        // After stopLockTask() the system returns window focus to this activity
+        // exactly once — that is our signal that the pin has been fully released
+        // and it is safe to navigate away without a process kill.
+        if (hasFocus && pendingPostLockTaskAction != null) {
+            Runnable action = pendingPostLockTaskAction;
+            pendingPostLockTaskAction = null;
+            action.run();
+        }
     }
 
     private void navigateToResults() {
@@ -632,7 +699,9 @@ public class ExamActivity extends BaseActivity implements QuestionPagerAdapter.O
             intent.putExtra("exam_code", examCode);
             intent.putExtra("student_name", studentName);
             intent.putExtra("enrollment_number", enrollmentNumber);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            // Do NOT use CLEAR_TASK while still in lock task mode — it causes
+            // the system to treat it as an illegal pinned-app exit and kill the process.
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
         });
@@ -641,7 +710,7 @@ public class ExamActivity extends BaseActivity implements QuestionPagerAdapter.O
     private void navigateToDashboard() {
         stopLockTaskAndExecute(() -> {
             Intent intent = new Intent(this, StudentDashboardActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
         });

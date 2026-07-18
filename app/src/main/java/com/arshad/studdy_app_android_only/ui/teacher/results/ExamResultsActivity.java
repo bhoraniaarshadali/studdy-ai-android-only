@@ -38,6 +38,8 @@ import retrofit2.Response;
  */
 public class ExamResultsActivity extends BaseActivity {
 
+    private static final String TAG = "ExamResultsActivity";
+
     private ActivityExamResultsBinding binding;
     private StudentResultsAdapter adapter;
     private Exam exam;

@@ -11,7 +11,6 @@
 
     <!-- Secondary: vibrant amber -->
     <color name="brand_secondary">#FFB300</color>
-    <color name="brand_secondary_dark">#FF8F00</color>
     <color name="brand_secondary_light">#FFE57F</color>
 
     <!-- Accent: teal -->
@@ -20,7 +19,6 @@
     <!-- ── Surface / background ───────────────────────────────────────────── -->
     <color name="bg_page">#F4F5FB</color>
     <color name="bg_card">#FFFFFF</color>
-    <color name="bg_card_elevated">#FAFAFA</color>
     <color name="surface_variant">#EEF0FB</color>
 
     <!-- Dark theme surfaces -->
@@ -29,12 +27,6 @@
     <color name="surface_variant_dark">#252840</color>
 
     <!-- ── Gradients (used in code via GradientDrawable) ─────────────────── -->
-    <color name="gradient_start">#5C6BC0</color>
-    <color name="gradient_end">#3949AB</color>
-    <color name="gradient_teacher_start">#5C6BC0</color>
-    <color name="gradient_teacher_end">#283593</color>
-    <color name="gradient_student_start">#26C6DA</color>
-    <color name="gradient_student_end">#0097A7</color>
 
     <!-- ── Semantic colours ───────────────────────────────────────────────── -->
     <color name="color_success">#2E7D32</color>
@@ -52,24 +44,14 @@
     <color name="text_hint">#9E9EA8</color>
     <color name="text_on_primary">#FFFFFF</color>
     <color name="text_on_secondary">#1A1D35</color>
-    <color name="text_link">#5C6BC0</color>
 
     <!-- ── Divider / stroke ───────────────────────────────────────────────── -->
     <color name="divider">#E0E2F0</color>
     <color name="stroke_light">#D0D3E8</color>
-    <color name="stroke_focus">#5C6BC0</color>
 
     <!-- ── Score / result colours ────────────────────────────────────────── -->
-    <color name="score_excellent">#2E7D32</color>
-    <color name="score_good">#1565C0</color>
-    <color name="score_average">#E65100</color>
-    <color name="score_poor">#C62828</color>
 
     <!-- ── Proctoring ─────────────────────────────────────────────────────── -->
-    <color name="proctor_safe">#2E7D32</color>
-    <color name="proctor_warning">#E65100</color>
-    <color name="proctor_danger">#C62828</color>
-    <color name="proctor_overlay">#CC000000</color>
 
     <!-- Legacy kept for compat -->
     <color name="black">#FF000000</color>

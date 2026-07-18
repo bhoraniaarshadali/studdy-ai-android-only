@@ -1,6 +1,7 @@
 package com.arshad.studdy_app_android_only.ui.teacher.results;
 
 import android.os.Bundle;
+import com.arshad.studdy_app_android_only.util.ErrorMessageMapper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -76,15 +77,16 @@ public class ExamAnswerKeyActivity extends AppCompatActivity {
                     Exam exam = response.body().get(0);
                     adapter.setQuestions(exam.questions);
                 } else {
-                    Toast.makeText(ExamAnswerKeyActivity.this, "Failed to load exam details: HTTP " + response.code(), Toast.LENGTH_SHORT).show();
+                    String friendly = ErrorMessageMapper.toUserMessage(TAG, "Failed to load exam details", response.code());
+                    Toast.makeText(ExamAnswerKeyActivity.this, friendly, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Exam>> call, Throwable t) {
                 binding.layoutLoadingOverlay.setVisibility(View.GONE);
-                Log.e(TAG, "Failed to load exam", t);
-                Toast.makeText(ExamAnswerKeyActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                String friendly = ErrorMessageMapper.toUserMessage(TAG, "Network error loading exam details", t);
+                Toast.makeText(ExamAnswerKeyActivity.this, friendly, Toast.LENGTH_SHORT).show();
             }
         });
     }

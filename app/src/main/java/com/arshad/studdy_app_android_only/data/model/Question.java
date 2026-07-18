@@ -28,6 +28,9 @@ public class Question {
     @SerializedName("correctIndex")
     public Integer correctIndex;
 
+    @SerializedName("modelAnswer")
+    public String modelAnswer;
+
     public Question() {}
 
     public Question(String id, String questionText, List<String> options, Integer correctIndex) {
@@ -35,5 +38,14 @@ public class Question {
         this.questionText = questionText;
         this.options = options;
         this.correctIndex = correctIndex;
+        this.modelAnswer = null;
+    }
+
+    public Question(String id, String questionText, List<String> options, Integer correctIndex, String modelAnswer) {
+        this.id = id;
+        this.questionText = questionText;
+        this.options = options;
+        this.correctIndex = correctIndex;
+        this.modelAnswer = modelAnswer;
     }
 }

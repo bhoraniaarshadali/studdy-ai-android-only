@@ -1,6 +1,7 @@
 package com.arshad.studdy_app_android_only.ui.teacher.papers;
 
 import android.content.Intent;
+import com.arshad.studdy_app_android_only.util.ErrorMessageMapper;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -26,7 +27,7 @@ import retrofit2.Response;
  * Displays teacher-generated downloadable multi-section exam papers.
  */
 public class PaperListActivity extends BaseActivity implements PapersAdapter.OnPaperClickListener {
-
+    private static final String TAG = "PaperListActivity";
     private ActivityPaperListBinding binding;
     private PapersAdapter adapter;
     private PaperApi paperApi;
@@ -83,7 +84,8 @@ public class PaperListActivity extends BaseActivity implements PapersAdapter.OnP
                         adapter.setPapers(papers);
                     }
                 } else {
-                    Toast.makeText(PaperListActivity.this, "Failed to load papers: HTTP " + response.code(), Toast.LENGTH_SHORT).show();
+                    String friendly = ErrorMessageMapper.toUserMessage(TAG, "Failed to load papers", response.code());
+                    Toast.makeText(PaperListActivity.this, friendly, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -91,7 +93,8 @@ public class PaperListActivity extends BaseActivity implements PapersAdapter.OnP
             public void onFailure(Call<List<GeneratedPaper>> call, Throwable t) {
                 binding.progressLoading.setVisibility(View.GONE);
                 binding.swipeRefresh.setRefreshing(false);
-                Toast.makeText(PaperListActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                String friendly = ErrorMessageMapper.toUserMessage(TAG, "Network error loading papers", t);
+                Toast.makeText(PaperListActivity.this, friendly, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -136,14 +139,16 @@ public class PaperListActivity extends BaseActivity implements PapersAdapter.OnP
                         binding.layoutEmptyState.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    Toast.makeText(PaperListActivity.this, "Failed to delete paper: HTTP " + response.code(), Toast.LENGTH_SHORT).show();
+                    String friendly = ErrorMessageMapper.toUserMessage(TAG, "Failed to delete paper", response.code());
+                    Toast.makeText(PaperListActivity.this, friendly, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 binding.progressLoading.setVisibility(View.GONE);
-                Toast.makeText(PaperListActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                String friendly = ErrorMessageMapper.toUserMessage(TAG, "Network error deleting paper", t);
+                Toast.makeText(PaperListActivity.this, friendly, Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -6,6 +6,7 @@ import com.arshad.studdy_app_android_only.data.local.entity.ExamDraft;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import com.arshad.studdy_app_android_only.util.ErrorMessageMapper;
 import android.database.Cursor;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -683,7 +684,8 @@ public class CreateExamActivity extends BaseActivity {
                     if (response.code() == 413 || response.code() == 400) {
                         Toast.makeText(CreateExamActivity.this, "This file couldn't be processed — please try a smaller PDF", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(CreateExamActivity.this, "AI generation failed: HTTP " + response.code(), Toast.LENGTH_SHORT).show();
+                        String friendly = ErrorMessageMapper.toUserMessage(TAG, "AI generation failed", response.code());
+                        Toast.makeText(CreateExamActivity.this, friendly, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -695,7 +697,8 @@ public class CreateExamActivity extends BaseActivity {
                 if (msg != null && (msg.contains("too large") || msg.contains("413") || msg.contains("400") || msg.contains("Length Required") || msg.contains("Request Entity Too Large"))) {
                     Toast.makeText(CreateExamActivity.this, "This file couldn't be processed — please try a smaller PDF", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(CreateExamActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    String friendly = ErrorMessageMapper.toUserMessage(TAG, "Network error during AI generation", t);
+                    Toast.makeText(CreateExamActivity.this, friendly, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -736,14 +739,16 @@ public class CreateExamActivity extends BaseActivity {
                     handleGeminiPaperResponse(response.body().getGeneratedText(), prompt);
                 } else {
                     setLoading(false);
-                    Toast.makeText(CreateExamActivity.this, "AI generation failed: HTTP " + response.code(), Toast.LENGTH_SHORT).show();
+                    String friendly = ErrorMessageMapper.toUserMessage(TAG, "AI generation failed", response.code());
+                    Toast.makeText(CreateExamActivity.this, friendly, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<GeminiResponse> call, Throwable t) {
                 setLoading(false);
-                Toast.makeText(CreateExamActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                String friendly = ErrorMessageMapper.toUserMessage(TAG, "Network error during AI generation", t);
+                Toast.makeText(CreateExamActivity.this, friendly, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -910,14 +915,16 @@ public class CreateExamActivity extends BaseActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(CreateExamActivity.this, "Failed to publish exam: HTTP " + response.code(), Toast.LENGTH_LONG).show();
+                    String friendly = ErrorMessageMapper.toUserMessage(TAG, "Failed to publish exam", response.code());
+                    Toast.makeText(CreateExamActivity.this, friendly, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Exam>> call, Throwable t) {
                 setLoading(false);
-                Toast.makeText(CreateExamActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                String friendly = ErrorMessageMapper.toUserMessage(TAG, "Network error publishing exam", t);
+                Toast.makeText(CreateExamActivity.this, friendly, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -938,7 +945,8 @@ public class CreateExamActivity extends BaseActivity {
                 @Override
                 public void onFailure(String errorMessage) {
                     setLoading(false);
-                    Toast.makeText(CreateExamActivity.this, "PDF upload failed: " + errorMessage, Toast.LENGTH_LONG).show();
+                    String friendly = ErrorMessageMapper.toUserMessage(TAG, "PDF upload failed", errorMessage);
+                    Toast.makeText(CreateExamActivity.this, friendly, Toast.LENGTH_LONG).show();
                 }
             });
         } else {
@@ -968,14 +976,16 @@ public class CreateExamActivity extends BaseActivity {
                     Toast.makeText(CreateExamActivity.this, "Paper saved successfully!", Toast.LENGTH_LONG).show();
                     finish();
                 } else {
-                    Toast.makeText(CreateExamActivity.this, "Failed to save paper: HTTP " + response.code(), Toast.LENGTH_LONG).show();
+                    String friendly = ErrorMessageMapper.toUserMessage(TAG, "Failed to save paper", response.code());
+                    Toast.makeText(CreateExamActivity.this, friendly, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<GeneratedPaper>> call, Throwable t) {
                 setLoading(false);
-                Toast.makeText(CreateExamActivity.this, "Failed to save: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                String friendly = ErrorMessageMapper.toUserMessage(TAG, "Network error saving paper", t);
+                Toast.makeText(CreateExamActivity.this, friendly, Toast.LENGTH_LONG).show();
             }
         });
     }

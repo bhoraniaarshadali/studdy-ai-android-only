@@ -1,6 +1,7 @@
 package com.arshad.studdy_app_android_only.ui.auth;
 
 import android.content.Intent;
+import com.arshad.studdy_app_android_only.util.ErrorMessageMapper;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -122,8 +123,8 @@ public class ResetPasswordActivity extends AppCompatActivity {
             @Override
             public void onFailure(String error) {
                 setLoading(false);
-                Log.e(TAG, "Password update failed: " + error);
-                Toast.makeText(ResetPasswordActivity.this, "Failed to update password: " + error, Toast.LENGTH_LONG).show();
+                String friendlyMsg = ErrorMessageMapper.toUserMessage(TAG, "Password update failed", error);
+                Toast.makeText(ResetPasswordActivity.this, friendlyMsg, Toast.LENGTH_LONG).show();
             }
         });
     }

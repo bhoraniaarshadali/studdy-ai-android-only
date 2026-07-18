@@ -1,6 +1,7 @@
 package com.arshad.studdy_app_android_only.ui.teacher.monitor;
 
 import android.os.Bundle;
+import com.arshad.studdy_app_android_only.util.ErrorMessageMapper;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -249,14 +250,16 @@ public class ExamMonitorActivity extends BaseActivity {
                     exam.questions = updatedQuestions;
                     Toast.makeText(ExamMonitorActivity.this, "Correct answers updated successfully!", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(ExamMonitorActivity.this, "Failed to update: HTTP " + response.code(), Toast.LENGTH_LONG).show();
+                    String friendly = ErrorMessageMapper.toUserMessage(TAG, "Failed to update exam questions", response.code());
+                    Toast.makeText(ExamMonitorActivity.this, friendly, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Exam>> call, Throwable t) {
                 binding.progressLoading.setVisibility(View.GONE);
-                Toast.makeText(ExamMonitorActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                String friendly = ErrorMessageMapper.toUserMessage(TAG, "Network error updating exam questions", t);
+                Toast.makeText(ExamMonitorActivity.this, friendly, Toast.LENGTH_LONG).show();
             }
         });
     }

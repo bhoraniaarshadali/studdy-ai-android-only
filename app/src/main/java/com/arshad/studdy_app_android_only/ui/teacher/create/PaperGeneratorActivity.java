@@ -1,6 +1,7 @@
 package com.arshad.studdy_app_android_only.ui.teacher.create;
 
 import android.content.Intent;
+import com.arshad.studdy_app_android_only.util.ErrorMessageMapper;
 import android.database.Cursor;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -291,14 +292,16 @@ public class PaperGeneratorActivity extends BaseActivity {
                     handleAiResponse(response.body().getGeneratedText());
                 } else {
                     setLoading(false, null);
-                    Toast.makeText(PaperGeneratorActivity.this, "Generation failed", Toast.LENGTH_SHORT).show();
+                    String friendly = ErrorMessageMapper.toUserMessage(TAG, "Gemini generation failed", response.code());
+                    Toast.makeText(PaperGeneratorActivity.this, friendly, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<GeminiResponse> call, Throwable t) {
                 setLoading(false, null);
-                Toast.makeText(PaperGeneratorActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                String friendly = ErrorMessageMapper.toUserMessage(TAG, "Network error during Gemini generation", t);
+                Toast.makeText(PaperGeneratorActivity.this, friendly, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -330,7 +333,8 @@ public class PaperGeneratorActivity extends BaseActivity {
                                             String.valueOf(i + 1),
                                             qr.questionText,
                                             qr.options != null ? qr.options : new ArrayList<>(),
-                                            qr.correctIndex != null ? qr.correctIndex : 0
+                                            qr.correctIndex != null ? qr.correctIndex : 0,
+                                            qr.modelAnswer
                                     );
                                     section.questions.add(q);
                                 }
@@ -373,13 +377,14 @@ public class PaperGeneratorActivity extends BaseActivity {
         sb.append("        {\n");
         sb.append("          \"questionText\": \"Question text here\",\n");
         sb.append("          \"options\": [\"Option 1\", \"Option 2\", \"Option 3\", \"Option 4\"],\n");
-        sb.append("          \"correctIndex\": 0\n");
+        sb.append("          \"correctIndex\": 0,\n");
+        sb.append("          \"modelAnswer\": \"For non-MCQ types (e.g. Short Answer, Long Answer, Fill in the Blank), provide the correct answer or sample model answer text here. For MCQs, this can be empty.\"\n");
         sb.append("        }\n");
         sb.append("      ]\n");
         sb.append("    }\n");
         sb.append("  ]\n");
         sb.append("}\n");
-        sb.append("For non-MCQ types, 'options' should be an empty array and 'correctIndex' can be 0.");
+        sb.append("For non-MCQ types, 'options' should be an empty array, 'correctIndex' can be 0, and the correct/model answer text must be provided in the 'modelAnswer' field.");
 
         return sb.toString();
     }
@@ -493,8 +498,10 @@ public class PaperGeneratorActivity extends BaseActivity {
                     if (question.options != null && !question.options.isEmpty() && question.correctIndex >= 0 && question.correctIndex < question.options.size()) {
                         String optionLabel = String.valueOf((char) ('A' + question.correctIndex));
                         answerText = optionLabel + ". " + question.options.get(question.correctIndex);
+                    } else if (question.modelAnswer != null && !question.modelAnswer.isEmpty()) {
+                        answerText = question.modelAnswer;
                     } else {
-                        answerText = "Model Answer Index: " + question.correctIndex;
+                        answerText = "No model answer available";
                     }
                     drawPdfWrappedText(
                             state,
@@ -681,14 +688,16 @@ public class PaperGeneratorActivity extends BaseActivity {
                 if (response.isSuccessful()) {
                     showSuccessDialog(paper);
                 } else {
-                    Toast.makeText(PaperGeneratorActivity.this, "Failed to save paper: " + response.code(), Toast.LENGTH_SHORT).show();
+                    String friendly = ErrorMessageMapper.toUserMessage(TAG, "Failed to save paper", response.code());
+                    Toast.makeText(PaperGeneratorActivity.this, friendly, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<GeneratedPaper>> call, Throwable t) {
                 setLoading(false, null);
-                Toast.makeText(PaperGeneratorActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                String friendly = ErrorMessageMapper.toUserMessage(TAG, "Network error saving paper", t);
+                Toast.makeText(PaperGeneratorActivity.this, friendly, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -792,5 +801,7 @@ public class PaperGeneratorActivity extends BaseActivity {
         List<String> options;
         @SerializedName("correctIndex")
         Integer correctIndex;
+        @SerializedName("modelAnswer")
+        String modelAnswer;
     }
 }

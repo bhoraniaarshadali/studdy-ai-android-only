@@ -1,6 +1,7 @@
 package com.arshad.studdy_app_android_only.ui.student.dashboard;
 
 import android.content.Intent;
+import com.arshad.studdy_app_android_only.util.ErrorMessageMapper;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -193,7 +194,8 @@ public class StudentDashboardActivity extends BaseActivity implements ExamCardAd
             @Override
             public void onFailure(String errorMessage) {
                 binding.swipeRefresh.setRefreshing(false);
-                Toast.makeText(StudentDashboardActivity.this, "Failed to load exams: " + errorMessage, Toast.LENGTH_SHORT).show();
+                String friendlyMsg = ErrorMessageMapper.toUserMessage("StudentDashboardActivity", "Failed to load exams", errorMessage);
+                Toast.makeText(StudentDashboardActivity.this, friendlyMsg, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -218,7 +220,8 @@ public class StudentDashboardActivity extends BaseActivity implements ExamCardAd
             @Override
             public void onFailure(String errorMessage) {
                 binding.swipeRefresh.setRefreshing(false);
-                Toast.makeText(StudentDashboardActivity.this, "Failed to load attempts: " + errorMessage, Toast.LENGTH_SHORT).show();
+                String friendlyMsg = ErrorMessageMapper.toUserMessage("StudentDashboardActivity", "Failed to load attempts", errorMessage);
+                Toast.makeText(StudentDashboardActivity.this, friendlyMsg, Toast.LENGTH_SHORT).show();
                 filterAndDisplayExams();
             }
         });
@@ -300,6 +303,7 @@ public class StudentDashboardActivity extends BaseActivity implements ExamCardAd
         }
 
         // 4. Check for active session (resumption)
+        isStartingExam = true;
         binding.swipeRefresh.setRefreshing(true);
         checkAndJoinSession(exam);
     }
@@ -350,7 +354,8 @@ public class StudentDashboardActivity extends BaseActivity implements ExamCardAd
             public void onFailure(String errorMessage) {
                 binding.swipeRefresh.setRefreshing(false);
                 isStartingExam = false;
-                Toast.makeText(StudentDashboardActivity.this, "Failed to start exam session: " + errorMessage, Toast.LENGTH_SHORT).show();
+                String friendlyMsg = ErrorMessageMapper.toUserMessage("StudentDashboardActivity", "Failed to start exam session", errorMessage);
+                Toast.makeText(StudentDashboardActivity.this, friendlyMsg, Toast.LENGTH_SHORT).show();
             }
         });
     }

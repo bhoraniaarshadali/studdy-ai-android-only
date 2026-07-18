@@ -2,6 +2,7 @@ package com.arshad.studdy_app_android_only.ui.auth;
 
 import androidx.appcompat.app.AlertDialog;
 import android.content.Intent;
+import com.arshad.studdy_app_android_only.util.ErrorMessageMapper;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -247,10 +248,11 @@ public class TeacherAuthActivity extends BaseActivity {
 
                     @Override
                     public void onFailure(String error) {
+                        String friendly = ErrorMessageMapper.toUserMessage("TeacherAuthActivity", "Failed to send reset link", error);
                         Toast.makeText(
                                 TeacherAuthActivity.this,
-                                R.string.msg_generic_error,
-                                Toast.LENGTH_SHORT
+                                friendly,
+                                Toast.LENGTH_LONG
                         ).show();
                     }
                 });
@@ -268,8 +270,9 @@ public class TeacherAuthActivity extends BaseActivity {
         int messageRes;
         switch (errorCode) {
             case "INVALID_CREDENTIALS":
-                messageRes = R.string.msg_invalid_credentials;
-                break;
+                String credentialMsg = "Incorrect email/enrollment number or password. Please try again.";
+                Toast.makeText(this, credentialMsg, Toast.LENGTH_LONG).show();
+                return;
             case "ALREADY_REGISTERED":
                 messageRes = R.string.msg_already_registered;
                 break;
@@ -277,8 +280,9 @@ public class TeacherAuthActivity extends BaseActivity {
                 messageRes = R.string.msg_password_too_short;
                 break;
             default:
-                messageRes = R.string.msg_generic_error;
-                break;
+                String friendlyMsg = ErrorMessageMapper.toUserMessage("TeacherAuthActivity", "Authentication failed", errorCode);
+                Toast.makeText(this, friendlyMsg, Toast.LENGTH_LONG).show();
+                return;
         }
         Toast.makeText(this, messageRes, Toast.LENGTH_LONG).show();
     }

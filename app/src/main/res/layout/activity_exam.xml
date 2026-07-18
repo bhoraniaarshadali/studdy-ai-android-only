@@ -218,6 +218,39 @@
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
+    <!-- Full screen loader during initialization -->
+    <FrameLayout
+        android:id="@+id/layout_init_loader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_page"
+        android:elevation="12dp"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminateTint="@color/brand_primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Initializing exam, please wait..."
+                android:textColor="@color/text_primary"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </FrameLayout>
+
     <!-- Full screen loader during submission -->
     <FrameLayout
         android:id="@+id/layout_submission_loader"

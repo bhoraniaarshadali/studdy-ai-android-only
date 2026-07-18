@@ -1,6 +1,7 @@
 package com.arshad.studdy_app_android_only.ui.student.result;
 
 import android.content.Intent;
+import com.arshad.studdy_app_android_only.util.ErrorMessageMapper;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,7 +103,8 @@ public class StudentResultActivity extends BaseActivity {
             @Override
             public void onFailure(String errorMessage) {
                 setLoading(false);
-                Toast.makeText(StudentResultActivity.this, "Failed to load exam details: " + errorMessage, Toast.LENGTH_LONG).show();
+                String friendlyMsg = ErrorMessageMapper.toUserMessage("StudentResultActivity", "Failed to load exam details", errorMessage);
+                Toast.makeText(StudentResultActivity.this, friendlyMsg, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -122,7 +124,8 @@ public class StudentResultActivity extends BaseActivity {
             @Override
             public void onFailure(String errorMessage) {
                 setLoading(false);
-                Toast.makeText(StudentResultActivity.this, "Failed to retrieve results: " + errorMessage, Toast.LENGTH_LONG).show();
+                String friendlyMsg = ErrorMessageMapper.toUserMessage("StudentResultActivity", "Failed to retrieve results", errorMessage);
+                Toast.makeText(StudentResultActivity.this, friendlyMsg, Toast.LENGTH_LONG).show();
             }
         });
     }
